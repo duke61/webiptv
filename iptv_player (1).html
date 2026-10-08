@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Auto Media IPTV Player</title>
+    <title>Özel Güvenli Araç IPTV Oynatıcı</title>
     <style>
-        /* MODERN, SEKME DESTEKLİ VE KIRILMAZ IPTV PLAYER TASARIMI */
+        /* DIŞARIYA BAĞIMLILIĞI OLMAYAN KIRILMAZ TASARIM MOTORU */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #090d16;
+            background-color: #0b0f19;
             color: #f1f5f9;
-            padding: 15px;
+            padding: 12px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,7 +28,7 @@
             max-width: 1200px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         header {
@@ -38,88 +38,77 @@
         }
 
         header h1 {
-            font-size: 22px;
+            font-size: 20px;
             color: #3b82f6;
             font-weight: 700;
         }
 
-        /* Sekme Sistemi (Tab Menü) Tasarımı */
-        .tabs-nav {
+        /* İki Sekmeli Tab Menü Tasarımı */
+        .tabs-header {
             display: flex;
             background-color: #151f32;
             border: 1px solid #243552;
             border-radius: 8px;
-            overflow: hidden;
             padding: 4px;
             gap: 4px;
         }
 
-        .tab-link {
+        .tab-btn {
             flex: 1;
             background: none;
             border: none;
             color: #94a3b8;
             padding: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.2s ease;
-            margin-top: 0;
         }
 
-        .tab-link:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        .tab-link.active {
+        .tab-btn.active {
             color: #fff;
             background-color: #2563eb;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
-        .tab-content {
+        .tab-body {
             display: none;
             background-color: #151f32;
             border: 1px solid #243552;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
         }
 
-        .tab-content.active {
+        .tab-body.active {
             display: block;
         }
 
-        .input-item {
-            margin-bottom: 10px;
+        .form-group {
+            margin-bottom: 8px;
         }
 
-        .row-inputs {
+        .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
         }
 
         label {
             display: block;
-            font-size: 11px;
+            font-size: 10px;
             color: #94a3b8;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         input {
             width: 100%;
-            background-color: #090d16;
+            background-color: #0b0f19;
             border: 1px solid #334155;
             color: #fff;
-            padding: 11px;
+            padding: 10px;
             border-radius: 6px;
             font-size: 13px;
-            transition: border-color 0.2s;
         }
 
         input:focus {
@@ -127,7 +116,7 @@
             border-color: #3b82f6;
         }
 
-        button {
+        .btn-action {
             width: 100%;
             padding: 12px;
             border: none;
@@ -136,43 +125,39 @@
             font-size: 13px;
             cursor: pointer;
             color: white;
-            transition: background-color 0.2s;
+            background-color: #2563eb;
             margin-top: 5px;
         }
 
-        .btn-submit { background-color: #2563eb; }
-        .btn-submit:hover { background-color: #1d4ed8; }
+        .btn-action:hover { background-color: #1d4ed8; }
 
-        /* Durum Bildirim Paneli */
-        .status-badge {
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
+        .status-strip {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
             text-align: center;
             display: block;
             background-color: rgba(30, 41, 59, 0.5);
             border: 1px solid #334155;
             color: #94a3b8;
-            font-weight: 500;
         }
 
-        /* Oynatıcı Alanı */
-        .panel-layout {
+        /* Oynatıcı Düzeni */
+        .main-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 12px;
         }
 
         @media (min-width: 1024px) {
-            .panel-layout { grid-template-columns: 1.8fr 1.2fr; }
+            .main-grid { grid-template-columns: 1.8fr 1.2fr; }
         }
 
-        .media-box {
+        .player-box {
             background-color: #000;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             border: 1px solid #243552;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
         }
 
         video {
@@ -181,51 +166,49 @@
             background-color: #000;
         }
 
-        .media-title {
+        .player-info {
             background-color: #151f32;
-            padding: 12px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 13px;
             border-top: 1px solid #243552;
         }
 
         /* Sağ Kanal Listesi */
-        .sidebar {
+        .sidebar-box {
             background-color: #151f32;
             border: 1px solid #243552;
-            border-radius: 10px;
-            padding: 15px;
-            height: 450px;
+            border-radius: 8px;
+            padding: 12px;
+            height: 420px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
 
-        .sidebar-top {
+        .sidebar-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .badge-info {
+        .count-lbl {
             background-color: #243552;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
             color: #cbd5e1;
-            font-weight: 600;
         }
 
-        .channels-list {
+        .list-container {
             flex: 1;
             overflow-y: auto;
-            margin-top: 10px;
+            margin-top: 8px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
-        .row-channel {
+        .channel-row {
             width: 100%;
             text-align: left;
             background-color: rgba(255, 255, 255, 0.02);
@@ -238,26 +221,24 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            transition: all 0.2s;
         }
 
-        .row-channel:hover {
+        .channel-row:hover {
             background-color: rgba(59, 130, 246, 0.1);
             border-color: #3b82f6;
             color: #fff;
         }
 
-        .row-channel.selected {
+        .channel-row.active {
             background-color: #2563eb;
             color: #fff;
             font-weight: bold;
-            border-color: #60a5fa;
         }
 
-        .blank-text {
+        .empty-info {
             text-align: center;
             color: #64748b;
-            font-size: 13px;
+            font-size: 12px;
             margin-top: 40px;
         }
     </style>
@@ -266,288 +247,90 @@
 
     <div class="container">
         <header>
-            <h1>🚗 Auto Media IPTV Player</h1>
+            <h1>🚗 Özel Güvenli Araç IPTV Oynatıcı</h1>
         </header>
 
-        <!-- SEKME SEÇİM MENÜSÜ -->
-        <div class="tabs-nav">
-            <button class="tab-link active" onclick="switchTab(event, 'm3u-tab')">🔗 M3U Link Girişi</button>
-            <button class="tab-link" onclick="switchTab(event, 'xtream-tab')">🔐 Xtream API Girişi</button>
+        <!-- SEKMELİ SEÇİM BUTONLARI -->
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="changeTab(event, 'tab-m3u')">🔗 M3U URL Girişi</button>
+            <button class="tab-btn" onclick="changeTab(event, 'tab-xtream')">🔐 Xtream API Girişi</button>
         </div>
 
-        <!-- M3U SEKME İÇERİĞİ -->
-        <div id="m3u-tab" class="tab-content active">
-            <div class="input-item">
-                <label>M3U / M3U8 Bağlantı Adresi</label>
-                <input type="text" id="m3uUrlBox" placeholder="https://site.com/playlist.m3u">
+        <!-- M3U PANELİ -->
+        <div id="tab-m3u" class="tab-body active">
+            <div class="form-group">
+                <label>Oynatma Listesi Linki (M3U)</label>
+                <input type="text" id="m3uInput" placeholder="https://site.com">
             </div>
-            <button class="btn-submit" onclick="startM3ULoad()">Kanalları Yükle</button>
+            <button class="btn-action" onclick="fetchM3U()">Listeyi Yükle</button>
         </div>
 
-        <!-- XTREAM API SEKME İÇERİĞİ -->
-        <div id="xtream-tab" class="tab-content">
-            <div class="input-item">
-                <label>Sunucu Adresi (Host URL)</label>
-                <input type="text" id="xtreamHostBox" placeholder="http://sunucuadresi.com:8080">
+        <!-- XTREAM PANELİ -->
+        <div id="tab-xtream" class="tab-body">
+            <div class="form-group">
+                <label>Sunucu Adresi (Host)</label>
+                <input type="text" id="xtreamHost" placeholder="http://sunucuadresi.com:8080" value="http://g41s12.com">
             </div>
-            <div class="row-inputs">
-                <div class="input-item">
+            <div class="form-row">
+                <div class="form-group">
                     <label>Kullanıcı Adı</label>
-                    <input type="text" id="xtreamUserBox" placeholder="Username">
+                    <input type="text" id="xtreamUser" placeholder="Username" value="x22a72a44v85">
                 </div>
-                <div class="input-item">
+                <div class="form-group">
                     <label>Şifre</label>
-                    <input type="password" id="xtreamPassBox" placeholder="Password">
+                    <input type="password" id="xtreamPass" placeholder="Password" value="719000">
                 </div>
             </div>
-            <button class="btn-submit" onclick="startXtreamLoad()">Giriş Yap ve Yükle</button>
+            <button class="btn-action" onclick="fetchXtream()">Giriş Yap ve Listele</button>
         </div>
 
-        <!-- ORTAK DURUM BİLDİRİM ŞERİDİ -->
-        <div id="statusAlert" class="status-badge">Sistem Hazır. Bilgilerinizi girip butona basın.</div>
+        <!-- DURUM BİLGİ ALANI -->
+        <div id="statusLabel" class="status-strip">Sistem Güvenli Modda Hazır.</div>
 
-        <!-- VİDEO VE LİSTE PANELİ -->
-        <div class="panel-layout">
-            <div class="media-box">
-                <video id="carVideoView" controls autoplay></video>
-                <div class="media-title" id="lblPlaying">
-                    Kanal: <span style="color: #60a5fa;">Seçilmedi</span>
+        <!-- ANA SİSTEM DÜZENİ -->
+        <div class="main-grid">
+            <div class="player-box">
+                <video id="iptvVideo" controls autoplay playsinline></video>
+                <div class="player-info" id="playingLabel">
+                    Yayın: <span style="color: #60a5fa;">Seçilmedi</span>
                 </div>
             </div>
 
-            <div class="sidebar">
-                <div class="sidebar-top">
-                    <h3>Kanallar</h3>
-                    <span class="badge-info" id="lblTotal">0 Kanal</span>
+            <div class="sidebar-box">
+                <div class="sidebar-head">
+                    <h3>Kanal Listesi</h3>
+                    <span class="count-lbl" id="totalCount">0 Kanal</span>
                 </div>
-                <input type="text" id="txtSearch" oninput="runSearch()" placeholder="Kanal ismi ara...">
-                <div class="channels-list" id="domChannelList">
-                    <div class="blank-text">Kanallar burada listelenecek.</div>
+                <input type="text" id="searchBox" oninput="filterChannels()" placeholder="Kanal ismi ara...">
+                <div class="list-container" id="channelListDom">
+                    <div class="empty-info">Bilgilerinizi girip listenizi yükleyin.</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        var loadedChannels = [];
-        var mainVideo = document.getElementById('carVideoView');
+        var cacheChannels = [];
+        var videoPlayer = document.getElementById('iptvVideo');
 
-        // Sekme Değiştirme Mekanizması
-        function switchTab(evt, tabId) {
-            var contents = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
-            var links = document.getElementsByClassName("tab-link");
-            for (var i = 0; i < links.length; i++) {
-                links[i].classList.remove("active");
-            }
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
+        // Sekme Kontrol Mekanizması
+        function changeTab(e, id) {
+            var bodies = document.getElementsByClassName("tab-body");
+            for (var i = 0; i < bodies.length; i++) bodies[i].classList.remove("active");
+            var btns = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+            document.getElementById(id).classList.add("active");
+            e.currentTarget.classList.add("active");
         }
 
-        // Durum ve Hata Bildirim Çizgisi
-        function printStatus(msg, mode) {
-            var el = document.getElementById('statusAlert');
-            el.innerText = msg;
-            if (mode === 'err') {
-                el.style.borderColor = '#ef4444';
-                el.style.color = '#fca5a5';
-                el.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
-            } else if (mode === 'ok') {
-                el.style.borderColor = '#10b981';
-                el.style.color = '#a7f3d0';
-                el.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
-            } else {
-                el.style.borderColor = '#3b82f6';
-                el.style.color = '#93c5fd';
-                el.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-            }
+        function setStatus(txt, err) {
+            var el = document.getElementById('statusLabel');
+            el.innerText = txt;
+            el.style.borderColor = err ? '#ef4444' : '#3b82f6';
+            el.style.color = err ? '#fca5a5' : '#93c5fd';
+            el.style.backgroundColor = err ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.15)';
         }
 
-        // KADEMELİ BAĞLANTI SİSTEMİ (M3U YÜKLEYİCİ)
-        function startM3ULoad() {
-            var rawUrl = document.getElementById('m3uUrlBox').value.trim();
-            if (!rawUrl) {
-                alert('Lütfen geçerli bir bağlantı adresi girin.');
-                return;
-            }
-
-            printStatus('Güvenli bağlantı kapısı aranıyor (Yöntem 1)...', 'wait');
-            
-            // Tüm tehlikeli karakterleri izole et
-            var cleanUrl = encodeURIComponent(rawUrl);
-            
-            // 1. Kademe İstek Tüneli (AllOrigins)
-            var gateway1 = 'https://api.allorigins.win/get?url=' + cleanUrl;
-
-            fetch(gateway1)
-                .then(function(res) { 
-                    if (!res.ok) throw new Error();
-                    return res.json(); 
-                })
-                .then(function(json) {
-                    if (json && json.contents && json.contents.trim().length > 0) {
-                        buildList(json.contents);
-                    } else {
-                        throw new Error();
-                    }
-                })
-                .catch(function() {
-                    // 1. Kademe başarısız olursa otomatik olarak 2. Kademe Tünel devralır
-                    tryGateway2(rawUrl);
-                });
-        }
-
-        // 2. Kademe İstek Tüneli (CorsProxy.io)
-        function tryGateway2(rawUrl) {
-            printStatus('Alternatif güvenli geçit deneniyor (Yöntem 2)...', 'wait');
-            var gateway2 = 'https://corsproxy.io/?' + encodeURIComponent(rawUrl);
-
-            fetch(gateway2)
-                .then(function(res) { 
-                    if (!res.ok) throw new Error();
-                    return res.text(); 
-                })
-                .then(function(text) {
-                    if (text && text.indexOf('#EXTM3U') !== -1) {
-                        buildList(text);
-                    } else {
-                        throw new Error();
-                    }
-                })
-                .catch(function() {
-                    // 2. Kademe de başarısız olursa doğrudan tünelsiz saf istek denenir
-                    tryDirectFetch(rawUrl);
-                });
-        }
-
-        // 3. Kademe: Doğrudan İstemci Bağlantısı (Direct Fetch)
-        function tryDirectFetch(rawUrl) {
-            printStatus('Doğrudan sunucu bağlantısı kuruluyor (Yöntem 3)...', 'wait');
-            fetch(rawUrl)
-                .then(function(res) { return res.text(); })
-                .then(function(text) {
-                    if (text && text.indexOf('#EXTM3U') !== -1) {
-                        buildList(text);
-                    } else {
-                        printStatus('IPTV sağlayıcınız tüm web tünellerini engelliyor veya link süresi dolmuş.', 'err');
-                    }
-                })
-                .catch(function() {
-                    printStatus('Hata: Sağlayıcı sunucusundan yanıt alınamadı. Bilgileri kontrol edin.', 'err');
-                });
-        }
-
-        // Xtream Bilgilerini Standart Güvenli M3U Biçimine Çevirme
-        function startXtreamLoad() {
-            var host = document.getElementById('xtreamHostBox').value.trim();
-            var user = document.getElementById('xtreamUserBox').value.trim();
-            var pass = document.getElementById('xtreamPassBox').value.trim();
-
-            if (!host || !user || !pass) {
-                alert('Lütfen tüm Xtream alanlarını eksiksiz doldurun.');
-                return;
-            }
-
-            if (host.indexOf('http') !== 0) {
-                host = 'http://' + host;
-            }
-
-            // Kilitlenmeye sebep olan '&' ve '=' karakterleri için güvenli dinamik url üretimi
-            var convertedUrl = host + '/get.php?username=' + user + '&password=' + pass + '&output=m3u8';
-            
-            // Sekme senkronizasyonu için görünmez aktarım yapar
-            document.getElementById('m3uUrlBox').value = convertedUrl;
-            
-            // Kademe motorunu çalıştırır
-            startM3ULoad();
-        }
-
-        // Metin Ayrıştırıcı Motor
-        function buildList(rawText) {
-            loadedChannels = [];
-            var rows = rawText.split('
-');
-            var lastTitle = '';
-
-            for (var i = 0; i < rows.length; i++) {
-                var line = rows[i].trim();
-                if (line.indexOf('#EXTINF:') === 0) {
-                    var idx = line.lastIndexOf(',');
-                    lastTitle = idx !== -1 ? line.substring(idx + 1).trim() : 'Canlı Yayın';
-                } else if (line && line.indexOf('#') !== 0) {
-                    if (lastTitle) {
-                        loadedChannels.push({ name: lastTitle, source: line });
-                        lastTitle = '';
-                    }
-                }
-            }
-
-            if (loadedChannels.length > 0) {
-                renderDOM(loadedChannels);
-                printStatus('Başarılı! ' + loadedChannels.length + ' kanal başarıyla listelendi.', 'ok');
-            } else {
-                printStatus('Hata: İndirilen listede oynatılabilecek kanal bulunamadı.', 'err');
-            }
-        }
-
-        // Kanalları Sağ Liste Kutusuna Yazdırma
-        function renderDOM(arr) {
-            var box = document.getElementById('domChannelList');
-            var totalLbl = document.getElementById('lblTotal');
-            box.innerHTML = '';
-            totalLbl.innerText = arr.length + ' Kanal';
-
-            if (arr.length === 0) {
-                box.innerHTML = '<div class="blank-text">Kanal bulunamadı.</div>';
-                return;
-            }
-
-            for (var i = 0; i < arr.length; i++) {
-                (function(item) {
-                    var btn = document.createElement('button');
-                    btn.className = 'row-channel';
-                    btn.innerText = item.name;
-                    btn.onclick = function() {
-                        var allBtns = document.querySelectorAll('.row-channel');
-                        for (var j = 0; j < allBtns.length; j++) {
-                            allBtns[j].classList.remove('selected');
-                        }
-                        btn.classList.add('selected');
-                        launchVideo(item.name, item.source);
-                    };
-                    box.appendChild(btn);
-                })(arr[i]);
-            }
-        }
-
-        // Arama Motoru
-        function runSearch() {
-            var query = document.getElementById('txtSearch').value.toLowerCase();
-            var matched = loadedChannels.filter(function(c) {
-                return c.name.toLowerCase().indexOf(query) !== -1;
-            });
-            renderDOM(matched);
-        }
-
-        // Videoyu Oynatıcıya Gönderme
-        function launchVideo(title, srcUrl) {
-            document.getElementById('lblPlaying').innerHTML = 'Kanal: <span style="color: #60a5fa; font-weight: bold;">' + title + '</span>';
-            
-            // Araç içi tarayıcıların karma protokol (http/https) engeline takılmaması için akış tünellemesi
-            var proxyStream = 'https://corsproxy.io/?' + encodeURIComponent(srcUrl);
-            mainVideo.src = proxyStream;
-            mainVideo.load();
-            mainVideo.play().catch(function() {
-                // Tünel reddi durumunda doğrudan ham adresten açmayı dener
-                mainVideo.src = srcUrl;
-                mainVideo.load();
-                mainVideo.play().catch(function() {
-                    printStatus('Aracınızın tarayıcısı bu yayın biçimini doğrudan desteklemiyor.', 'err');
-                });
-            });
-        }
-    </script>
-</body>
-</html>
+        // M3U Yükleme Motoru
+        function fetchM3U() {
+            var url = document.getElementById('m3uInput').value.trim();
