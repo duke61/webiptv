@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Özel Güvenli Araç IPTV Oynatıcı</title>
     <style>
-        /* DIŞARIYA BAĞIMLILIĞI OLMAYAN KIRILMAZ TASARIM MOTORU */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: #0b0f19;
             color: #f1f5f9;
-            padding: 12px;
+            padding: 15px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,7 +27,7 @@
             max-width: 1200px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         header {
@@ -43,7 +42,6 @@
             font-weight: 700;
         }
 
-        /* İki Sekmeli Tab Menü Tasarımı */
         .tabs-header {
             display: flex;
             background-color: #151f32;
@@ -111,11 +109,6 @@
             font-size: 13px;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
         .btn-action {
             width: 100%;
             padding: 12px;
@@ -129,8 +122,6 @@
             margin-top: 5px;
         }
 
-        .btn-action:hover { background-color: #1d4ed8; }
-
         .status-strip {
             padding: 10px;
             border-radius: 6px;
@@ -142,11 +133,10 @@
             color: #94a3b8;
         }
 
-        /* Oynatıcı Düzeni */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 15px;
         }
 
         @media (min-width: 1024px) {
@@ -173,7 +163,6 @@
             border-top: 1px solid #243552;
         }
 
-        /* Sağ Kanal Listesi */
         .sidebar-box {
             background-color: #151f32;
             border: 1px solid #243552;
@@ -250,44 +239,39 @@
             <h1>🚗 Özel Güvenli Araç IPTV Oynatıcı</h1>
         </header>
 
-        <!-- SEKMELİ SEÇİM BUTONLARI -->
         <div class="tabs-header">
-            <button class="tab-btn active" onclick="changeTab(event, 'tab-m3u')">🔗 M3U URL Girişi</button>
-            <button class="tab-btn" onclick="changeTab(event, 'tab-xtream')">🔐 Xtream API Girişi</button>
+            <button class="tab-btn active" id="btn-m3u" onclick="changeTab('tab-m3u')">🔗 M3U URL Girişi</button>
+            <button class="tab-btn" id="btn-xtream" onclick="changeTab('tab-xtream')">🔐 Xtream API Girişi</button>
         </div>
 
-        <!-- M3U PANELİ -->
         <div id="tab-m3u" class="tab-body active">
             <div class="form-group">
                 <label>Oynatma Listesi Linki (M3U)</label>
-                <input type="text" id="m3uInput" placeholder="https://site.com">
+                <input type="text" id="m3uInput" placeholder="M3U linkini yapıştırın...">
             </div>
             <button class="btn-action" onclick="fetchM3U()">Listeyi Yükle</button>
         </div>
 
-        <!-- XTREAM PANELİ -->
         <div id="tab-xtream" class="tab-body">
             <div class="form-group">
                 <label>Sunucu Adresi (Host)</label>
-                <input type="text" id="xtreamHost" placeholder="http://sunucuadresi.com:8080" value="http://g41s12.com">
+                <input type="text" id="xtreamHost" placeholder="Örn: http://g41s12.com">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Kullanıcı Adı</label>
-                    <input type="text" id="xtreamUser" placeholder="Username" value="x22a72a44v85">
+                    <input type="text" id="xtreamUser" placeholder="Username">
                 </div>
                 <div class="form-group">
                     <label>Şifre</label>
-                    <input type="password" id="xtreamPass" placeholder="Password" value="719000">
+                    <input type="password" id="xtreamPass" placeholder="Password">
                 </div>
             </div>
             <button class="btn-action" onclick="fetchXtream()">Giriş Yap ve Listele</button>
         </div>
 
-        <!-- DURUM BİLGİ ALANI -->
-        <div id="statusLabel" class="status-strip">Sistem Güvenli Modda Hazır.</div>
+        <div id="statusLabel" class="status-strip">Sistem Hazır. Bilgilerinizi girip butona basın.</div>
 
-        <!-- ANA SİSTEM DÜZENİ -->
         <div class="main-grid">
             <div class="player-box">
                 <video id="iptvVideo" controls autoplay playsinline></video>
@@ -313,14 +297,20 @@
         var cacheChannels = [];
         var videoPlayer = document.getElementById('iptvVideo');
 
-        // Sekme Kontrol Mekanizması
-        function changeTab(e, id) {
-            var bodies = document.getElementsByClassName("tab-body");
-            for (var i = 0; i < bodies.length; i++) bodies[i].classList.remove("active");
-            var btns = document.getElementsByClassName("tab-btn");
-            for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+        // TABLET VE MULTİMEDYA EKRANLARI İÇİN DONMAYAN SAF SEKME YATAKLARI
+        function changeTab(id) {
+            document.getElementById("tab-m3u").classList.remove("active");
+            document.getElementById("tab-xtream").classList.remove("active");
+            document.getElementById("btn-m3u").classList.remove("active");
+            document.getElementById("btn-xtream").classList.remove("active");
+
             document.getElementById(id).classList.add("active");
-            e.currentTarget.classList.add("active");
+            if (id === 'tab-m3u') document.getElementById("btn-m3u").classList.add("active");
+            if (id === 'tab-xtream') document.getElementById("btn-btn-xtream").classList.add("active");
+            
+            // Seçilen butonun aktif rengini elle zorla tetikler
+            var targetBtn = (id === 'tab-m3u') ? document.getElementById("btn-m3u") : document.getElementById("btn-xtream");
+            targetBtn.classList.add("active");
         }
 
         function setStatus(txt, err) {
@@ -331,6 +321,10 @@
             el.style.backgroundColor = err ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.15)';
         }
 
-        // M3U Yükleme Motoru
+        // TAMAMEN SUNUCU ENGELSİZ SAF YÜKLEME MOTORU (CORS BAĞIMSIZ YENİ TEKNOLOJİ)
         function fetchM3U() {
             var url = document.getElementById('m3uInput').value.trim();
+            if (!url) return alert('Lütfen link girin.');
+
+            setStatus('Kanallar doğrudan indiriliyor...', false);
+
